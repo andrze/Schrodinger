@@ -7,15 +7,18 @@ System::System()
 
 }
 
-System::System(StepFunction wavefunction){
+System::System(StepFunction wavefunction, double imaginary_time){
     this->wavefunction = wavefunction;
+
+    delta_t = std::complex<double>(re_delta_t, -re_delta_t*imaginary_time);
 
     potential_function = StepFunction(wavefunction.step_size, std::vector<std::complex<double> >(wavefunction.vals.size(), 0.));
 }
 
-System::System(StepFunction wavefunction, StepFunction potential_function){
+System::System(StepFunction wavefunction, StepFunction potential_function, double imaginary_time){
     this->wavefunction = wavefunction;
     this->potential_function = potential_function;
+    delta_t = std::complex<double>(re_delta_t, -re_delta_t*imaginary_time);
 }
 
 StepFunction System::hamiltonian(){
@@ -51,10 +54,10 @@ void System::rk4_step(){
 
     first_eval = -i * hamiltonian(first);
 
-    second = first + delta_t/2*first_eval;
+    second = first + delta_t/2.*first_eval;
     second_eval = -i * hamiltonian(second);
 
-    third = first + delta_t/2*second_eval;
+    third = first + delta_t/2.*second_eval;
     third_eval = -i * hamiltonian(third);
 
     fourth = first + delta_t*third_eval;
@@ -65,5 +68,5 @@ void System::rk4_step(){
                      + 2*third_eval
                      - i * hamiltonian(fourth));
 
-    wavefunction = final;
+    wavefunction = (1./std::sqrt(final.norm()))*final;
 }

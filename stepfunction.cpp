@@ -69,14 +69,14 @@ StepFunction StepFunction::derivative(){
 
 StepFunction StepFunction::second_derivative(){
 
-    auto second = derivative().derivative();
+    //auto second = derivative().derivative();
     std::vector<std::complex<double> > new_vals;
 
     new_vals.reserve(vals.size());
 
     double h2 = step_size*step_size;
     std::array<double,7> coeficients{1./90, -3./20, 3./2, -49./18, 3./2, -3./20, 1./90};
-    std::array<double,9> coeficients2{-1./560, 8./315, -1./5, 8./5, -205./72, 8./5, -1./5, 8./315, -1./560};
+    //std::array<double,9> coeficients2{-1./560, 8./315, -1./5, 8./5, -205./72, 8./5, -1./5, 8./315, -1./560};
 
     for(auto& c: coeficients){
         c /= h2;
@@ -85,7 +85,7 @@ StepFunction StepFunction::second_derivative(){
     for(int i=0; i<int(vals.size()); i++){
         std::complex<double> val = 0.;
         for(int j=0; j<7; j++){
-            val += coeficients[j]*(*this)[i-3+j];
+            val += coeficients[size_t(j)]*(*this)[i-3+j];
         }
         new_vals.push_back(val);
         //new_vals.push_back((-(*this)[i-2] + 16.*(*this)[i-1] -30.*(*this)[i] + 16.*(*this)[i+1] - (*this)[i+2])/(12.*step_size*step_size));

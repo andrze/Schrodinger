@@ -1,21 +1,19 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include "qcustomplot.h"
 #include "system.h"
-
+#include <QMainWindow>
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
     void plot();
@@ -44,16 +42,20 @@ private slots:
     void on_wavefunction_x0_valueChanged(double);
     void on_wavefunction_x1_valueChanged(double);
 
+    void on_imaginaryTimeSpinBox_valueChanged(double);
+
+    void on_linear_potential_clicked();
+
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
 
     System system;
     std::unique_ptr<QTimer> timer;
-    size_t step=0;
+    size_t step = 0;
 
-    StepFunction harmonic_potential, no_potential, mexican_hat, step_potential;
+    StepFunction harmonic_potential, no_potential, mexican_hat, step_potential, linear_potential;
     StepFunction gauss, gauss_sine, gauss_plane_wave, gauss_pair;
-    double step_size=10/2048.;
+    double step_size = 10 / 512.;
 
     void recalculate_functions();
     void restart_system();
